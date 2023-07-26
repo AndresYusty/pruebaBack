@@ -6,13 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("usuario")
+@RequestMapping("/usuario")
 public class ClienteController {
 
     // Datos quemados (simulando una base de datos)
@@ -20,11 +23,10 @@ public class ClienteController {
 
     
     public ClienteController() {
-        // Agregar clientes de ejemplo a la "base de datos" 
+    
         clientes.put("C23445322", new cliente("Juan", "Carlos", "Saldaña", "Gómez", "3188113915", "Calle 51, No. 45-67", "Bogotá"));
         clientes.put("P98765432", new cliente("María", "", "García", "Martínez", "3214523521", "Avenida 21, No. 78-90", "Medellín"));
     }
-
 
     @GetMapping("/cliente")
     public ResponseEntity<?> obtenerCliente(
@@ -34,7 +36,7 @@ public class ClienteController {
     	
     	try {
     		
-        // Validar los parámetros de entrada (Manejo de error 400)
+    
         if (tipoId == null || numeroId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Los parámetros 'tipo' y 'numero' son obligatorios.");
         }
@@ -49,16 +51,15 @@ public class ClienteController {
         // Buscar al cliente en la "base de datos (quemada)"
         cliente cliente = clientes.get(clienteId);
 
-        //Manejo de error http 404 
+
         if (cliente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado.");
         } 
 
-        //Manejo http 200 
         return ResponseEntity.ok("Cliente encontrado: " + cliente);
         
     	} catch (Exception ex) {
-            // Capturar cualquier excepción no controlada manejar el error 500
+            // Capturar cualquier excepción no controladas y manejar el error 500
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + ex.getMessage());
         }
     }
